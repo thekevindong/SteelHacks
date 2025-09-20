@@ -1,34 +1,3 @@
-#   THIS IS AN EXAMPLE OF HOW TO USE THE API!!!
-#   function App() {
-#     const [buildings, setBuildings] = useState([])
-#   
-#     useEffect(() => {
-#       // Fetch the list of buildings from Flask API
-#       fetch('/api/buildings')
-#         .then((res) => res.json())
-#         .then((data) => setBuildings(data))
-#         .catch((err) => console.error("Error fetching buildings:", err))
-#     }, [])
-#   
-#     return (
-#       <>
-#         <Header />
-#         <div className="building-list" style={{ padding: '1rem' }}>
-#           <h2>Buildings</h2>
-#           {buildings.length > 0 ? (
-#             <ul>
-#               {buildings.map((building, idx) => (
-#                 <li key={idx}>{building}</li>
-#               ))}
-#             </ul>
-#           ) : (
-#             <p>Loading buildings...</p>
-#           )}
-#         </div>
-#       </>
-#     )
-#   }
-
 from flask import Flask, jsonify, send_from_directory, request
 import os
 import json

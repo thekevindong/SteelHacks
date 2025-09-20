@@ -1,12 +1,12 @@
 import React from "react";
 import './Card.css'
 
-function Card(){
+function Card({ buildingName }){
   return(
     <div className="cardItem">
       <div className="upperPortion">
-        <img className="card-Pic"src="./public/pittLogo.png"></img>
-        <p>Allen Hall</p>
+        <img className="card-Pic"src="./public/pittLogo.png" alt={buildingName} />
+        <p>{buildingName}</p>
         <p>Location: 3941 O'Hara St, Pittsburgh, PA 15213</p>
         <p>Availible</p>
       </div>
