@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './Components/Header/Header'
-import Card from './Components/Header/Card/Card.jsx'
-import Footer from './Components/Header/Footer/footer.jsx'
+import Card from './Components/Card/Card.jsx'
+import Footer from './Components/Footer/footer.jsx'
+import Modal from './Components/Modal/Modal.jsx'
 
 import './App.css'
 
 function App() {
-
   const [buildings, setBuildings] = useState([])
+  const [selectedBuilding, setSelectedBuilding] = useState(null)
 
   // Fetch buildings from Flask API
   useEffect(() => {
@@ -19,21 +19,32 @@ function App() {
   }, [])
 
   return (
-    <>
-      <div>
-        <Header></Header>
-        <div className='cardHolder'>
-          {buildings.length > 0 ? (
-            buildings.map((building, idx) => (
-              <Card key={idx} buildingName={building} />
-            ))
-          ) : (
-            <p>Loading buildings...</p>
-          )}
-        </div>
-        <Footer></Footer>
+    <div>
+      <Header />
+
+      <div className="cardHolder">
+        {buildings.length > 0 ? (
+          buildings.map((building, idx) => (
+            <div
+              key={idx}
+              className="infoLink"
+              onClick={() => setSelectedBuilding(building)}
+            >
+              <Card buildingName={building} />
+            </div>
+          ))
+        ) : (
+          <p>Loading buildings...</p>
+        )}
       </div>
-    </>
+
+      {/* Modal shows when a building is clicked */}
+      {selectedBuilding && (
+        <Modal building={selectedBuilding} onClose={() => setSelectedBuilding(null)} />
+      )}
+
+      <Footer />
+    </div>
   )
 }
 
