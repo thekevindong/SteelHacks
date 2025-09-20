@@ -1,0 +1,43 @@
+.cardItem{
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+  max-width: 300px;
+  background-color: white;
+  font-family: inherit;
+  margin:10px;
+}
+
+.upperPortion{
+  background: linear-gradient(to bottom, #2563EB, #1D4ED8);
+  color:white;
+  padding: 16px;
+  text-align: center;
+}
+
+.upperPortion h3{
+  font: size 24px;
+}
+.upperPortion p{
+  margin: 4px 0px;
+}
+
+.middlePortion{
+  padding:16px;
+  background-color:#f5f7fa;
+}
+
+.information p{
+  font-weight: 800;
+}
+
+.listItems{
+  margin:0;
+  padding-left: 16px;
+  list-style: none;
+}
+
+.card-Pic{
+  width:100px;
+  display: flex;
+}
