@@ -9,6 +9,7 @@ import './App.css'
 function App() {
   const [buildings, setBuildings] = useState([])
   const [selectedBuilding, setSelectedBuilding] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
 
   // Fetch buildings from Flask API
   useEffect(() => {
@@ -18,13 +19,19 @@ function App() {
       .catch((err) => console.error("Error fetching buildings:", err))
   }, [])
 
+  // Filter buildings by search term
+  const filteredBuildings = buildings.filter((building) =>
+    building.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
   return (
     <div>
-      <Header />
+      {/* Pass searchTerm + handler down to Header */}
+      <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
       <div className="cardHolder">
-        {buildings.length > 0 ? (
-          buildings.map((building, idx) => (
+        {filteredBuildings.length > 0 ? (
+          filteredBuildings.map((building, idx) => (
             <div
               key={idx}
               className="infoLink"
@@ -34,13 +41,15 @@ function App() {
             </div>
           ))
         ) : (
-          <p>Loading buildings...</p>
+          <p>No buildings found.</p>
         )}
       </div>
 
-      
       {selectedBuilding && (
-        <Modal building={selectedBuilding} onClose={() => setSelectedBuilding(null)} />
+        <Modal
+          building={selectedBuilding}
+          onClose={() => setSelectedBuilding(null)}
+        />
       )}
 
       <Footer />
