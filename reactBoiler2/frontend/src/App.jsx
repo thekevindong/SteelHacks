@@ -1,18 +1,28 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import Header from './Components/Header/Header'
+import Card from './Components/Header/Card/Card.jsx'
+
 import './App.css'
+import Footer from './Components/Header/Footer/footer.jsx'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
       <div>
-        <Header />
+        <Header></Header>
+        <div className='cardHolder'>
+          <Card></Card>
+          <Card></Card>
+          <Card></Card>
+          <Card></Card>
+          <Card></Card>
+          <Card></Card>
+          <Card></Card>
+          <Card></Card>
+        </div>
+        <Footer></Footer>
       </div>
-
     </>
   )
 }
