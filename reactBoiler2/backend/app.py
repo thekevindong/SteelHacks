@@ -1,58 +1,63 @@
 from flask import Flask, request, jsonify
-import json
 from flask_cors import CORS
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 
+# --- Flask app setup ---
 app = Flask(__name__)
-CORS(app)  # allow requests from React (running on localhost:5173)
+CORS(app)  # Enable CORS for all routes
 
-MAX_TEXT_SIZE = 1024
-JSON_FILE = 'messages.json'
+# --- MongoDB setup ---
+client = MongoClient("mongodb://localhost:27017/")  # change if using Atlas
+db = client["your_database_name"]  # replace with your DB name
+buildings_collection = db["buildings"]
 
-try:
-    with open(JSON_FILE, 'r') as file:
-        content = file.read()
-        messages = json.loads(content) if content else []
-except (FileNotFoundError, json.JSONDecodeError):
-    messages = []
+# --- Helper function to convert ObjectId ---
+def serialize_building(building):
+    building["_id"] = str(building["_id"])
+    return building
 
+# --- Routes ---
 
-@app.route('/upload', methods=['POST'])
-def upload_stuff():
-    global messages
+# Add a new building
+@app.route("/addBuilding", methods=["POST"])
+def add_building():
     data = request.json
-    to_be_uploaded = data.get('text', '')
+    if not data or "building_name" not in data:
+        return jsonify({"error": "Missing building_name"}), 400
 
-    if len(to_be_uploaded.encode('utf-8')) > MAX_TEXT_SIZE:
-        return jsonify(
-            {"error": f"Text size exceeds the limit of {MAX_TEXT_SIZE} bytes"}
-        ), 400
+    result = buildings_collection.insert_one(data)
+    return jsonify({"inserted_id": str(result.inserted_id)}), 201
 
-    messages.insert(0, to_be_uploaded)
+# Remove a building by ID
+@app.route("/removeBuilding/<id>", methods=["DELETE"])
+def remove_building(id):
+    try:
+        result = buildings_collection.delete_one({"_id": ObjectId(id)})
+        if result.deleted_count == 0:
+            return jsonify({"error": "Building not found"}), 404
+        return jsonify({"deleted_count": result.deleted_count})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
-    with open(JSON_FILE, 'w') as file:
-        json.dump(messages, file)
+# Get all buildings
+@app.route("/getBuildings", methods=["GET"])
+def get_buildings():
+    buildings = list(buildings_collection.find())
+    buildings = [serialize_building(b) for b in buildings]
+    return jsonify(buildings)
 
-    return jsonify({"message": "Uploaded successfully"})
+# Get a single building by ID (optional)
+@app.route("/getBuilding/<id>", methods=["GET"])
+def get_building(id):
+    try:
+        building = buildings_collection.find_one({"_id": ObjectId(id)})
+        if not building:
+            return jsonify({"error": "Building not found"}), 404
+        return jsonify(serialize_building(building))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
-
-@app.route('/fetch', methods=['GET'])
-def fetch_stuff():
-    global messages
-    message_num = int(request.args.get('messageNum', 0))
-
-    if 0 <= message_num < len(messages):
-        fetched_message = messages[message_num]
-    else:
-        fetched_message = "Invalid message index number"
-
-    return jsonify({"text": fetched_message})
-
-
-@app.route('/fetch_all', methods=['GET'])
-def fetch_all():
-    global messages
-    return jsonify(messages)
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+# --- Run the app ---
+if __name__ == "__main__":
+    app.run(debug=True)

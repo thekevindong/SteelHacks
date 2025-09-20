@@ -2,8 +2,6 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import Header from './Components/Header/Header'
-import Messages from './Components/Messages/Messages' //for flask backend
-
 import './App.css'
 
 function App() {
@@ -15,9 +13,6 @@ function App() {
         <Header />
       </div>
 
-      <div className="p-4">
-        <Messages /> {/* todo, Flask integration goes here */}
-      </div>
     </>
   )
 }
