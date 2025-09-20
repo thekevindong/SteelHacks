@@ -8,7 +8,7 @@ function Header(){
       {/* Logo / Brand */}
       <div className="logo-container">
         <div className="logo-circle">P</div>
-        <span className="logo-text">OpenDesk</span>
+        <span className="logo-text">Pitt Campus Dashboard</span>
       </div>
 
       {/* Navigation */}
@@ -19,9 +19,9 @@ function Header(){
         <a href="#about">About</a>
       </nav>
 
-      {/* Search / User Actions */}
+      {/* Search on its own line */}
       <div className="search-container">
-        <input type="text" placeholder="Search buildings..." />
+        <input type="text" placeholder="Search buildings, rooms, or events..." />
         <button>Go</button>
       </div>
     </header>
