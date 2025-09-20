@@ -1,8 +1,8 @@
 import json
 
 # --- CONFIGURATION ---
-input_file = "allen-2.json"   # Change to your JSON file
-output_file = "allen-2_flattened.json"
+input_file = "C:/Users/conni/Downloads/SteelHacks/reactBoiler2/data/alum.json"   # Change to your JSON file
+output_file = "C:/Users/conni/Downloads/SteelHacks/reactBoiler2/data/alum_flattened.json"
 
 # --- LOAD THE ORIGINAL JSON ---
 with open(input_file, "r") as f:
