@@ -1,14 +1,15 @@
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './Components/Header/Header'
-import Card from './Components/Header/Card/Card.jsx'
-import Footer from './Components/Header/Footer/footer.jsx'
+import Card from './Components/Card/Card.jsx'
+import Footer from './Components/Footer/footer.jsx'
+import Modal from './Components/Modal/Modal.jsx'
 
 import './App.css'
 
 function App() {
-
   const [buildings, setBuildings] = useState([])
+  const [selectedBuilding, setSelectedBuilding] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
 
   // Fetch buildings from Flask API
   useEffect(() => {
@@ -18,22 +19,41 @@ function App() {
       .catch((err) => console.error("Error fetching buildings:", err))
   }, [])
 
+  // Filter buildings by search term
+  const filteredBuildings = buildings.filter((building) =>
+    building.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
   return (
-    <>
-      <div>
-        <Header></Header>
-        <div className='cardHolder'>
-          {buildings.length > 0 ? (
-            buildings.map((building, idx) => (
-              <Card key={idx} buildingName={building} />
-            ))
-          ) : (
-            <p>Loading buildings...</p>
-          )}
-        </div>
-        <Footer></Footer>
+    <div>
+      {/* Pass searchTerm + handler down to Header */}
+      <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
+      <div className="cardHolder">
+        {filteredBuildings.length > 0 ? (
+          filteredBuildings.map((building, idx) => (
+            <div
+              key={idx}
+              className="infoLink"
+              onClick={() => setSelectedBuilding(building)}
+            >
+              <Card buildingName={building} />
+            </div>
+          ))
+        ) : (
+          <p>No buildings found.</p>
+        )}
       </div>
-    </>
+
+      {selectedBuilding && (
+        <Modal
+          building={selectedBuilding}
+          onClose={() => setSelectedBuilding(null)}
+        />
+      )}
+
+      <Footer />
+    </div>
   )
 }
 

@@ -1,0 +1,154 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "4865669a-7dbc-4d05-a6d1-09158c7c8807",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import json, re, glob, os\n",
+    "from collections import defaultdict\n",
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "2170ddcf-81f6-42e9-9115-d6c8372106e0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "DATA_GLOB = \"classroom_data/*.json\"    \n",
+    "LOCAL_TZ = \"America/New_York\"\n",
+    "OUT_DIR = \"out\"                         \n",
+    "os.makedirs(OUT_DIR, exist_ok=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "6780186d-c20d-4f1c-9d8a-19d8708d858f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Filename not in expected pattern: wwph_galle_160.json\n",
+      "Filename not in expected pattern: fkart_cloist_486.json\n",
+      "Filename not in expected pattern: lawpatio_1827.json\n",
+      "Filename not in expected pattern: lawcourt_1169.json\n",
+      "Filename not in expected pattern: lawrn_lobby_488.json\n",
+      "Done. Wrote 28 building files to: out/\n"
+     ]
+    }
+   ],
+   "source": [
+    "file_pat = re.compile(r\"^([A-Za-z]+)(\\d+).*\\.json$\")\n",
+    "def extract_building_room(filename):\n",
+    "    base = os.path.basename(filename)\n",
+    "    m = file_pat.match(base)\n",
+    "    if not m:\n",
+    "        raise ValueError(f\"Filename not in expected pattern: {base}\")\n",
+    "    building = m.group(1).lower()   \n",
+    "    room = m.group(2)               \n",
+    "    return building, room\n",
+    "def safe_course_name(summary):\n",
+    "    if summary is None:\n",
+    "        return \"UNKNOWN\"\n",
+    "    s = str(summary).strip()\n",
+    "    first = next((ln.strip() for ln in s.splitlines() if ln.strip()), \"UNKNOWN\")\n",
+    "    return first\n",
+    "def load_events_from_file(path):\n",
+    "    with open(path, \"r\") as f:\n",
+    "        data = json.load(f)\n",
+    "    df = pd.json_normalize(data[\"events\"])\n",
+    "    for col in [\"start\", \"end\", \"summary\"]:\n",
+    "        if col not in df.columns:\n",
+    "            df[col] = None\n",
+    "    df[\"start\"] = pd.to_datetime(df[\"start\"], utc=True, errors=\"coerce\")\n",
+    "    df[\"end\"]   = pd.to_datetime(df[\"end\"],   utc=True, errors=\"coerce\")\n",
+    "    df = df.dropna(subset=[\"start\", \"end\"])\n",
+    "\n",
+    "    df[\"start_local\"] = df[\"start\"].dt.tz_convert(LOCAL_TZ)\n",
+    "    df[\"end_local\"]   = df[\"end\"].dt.tz_convert(LOCAL_TZ)\n",
+    "\n",
+    "    df[\"date_str\"] = df[\"start_local\"].dt.strftime(\"%m/%d/%y\")\n",
+    "    df[\"timeframe\"] = (\n",
+    "        df[\"start_local\"].dt.strftime(\"%H:%M\") + \" - \" + df[\"end_local\"].dt.strftime(\"%H:%M\")\n",
+    "    )\n",
+    "    df[\"course\"] = df[\"summary\"].apply(safe_course_name)\n",
+    "\n",
+    "    return df[[\"course\", \"date_str\", \"timeframe\"]]\n",
+    "\n",
+    "buildings = defaultdict(lambda: {\"rooms\": defaultdict(lambda: {\"classes\": defaultdict(lambda: {\"schedules\": []}) })})\n",
+    "\n",
+    "for path in glob.glob(DATA_GLOB):\n",
+    "    try:\n",
+    "        building, room = extract_building_room(path)\n",
+    "    except ValueError as e:\n",
+    "        print(e)\n",
+    "        continue\n",
+    "\n",
+    "    df = load_events_from_file(path)\n",
+    "\n",
+    "    for _, row in df.iterrows():\n",
+    "        course = row[\"course\"]\n",
+    "        buildings[building][\"rooms\"][room][\"classes\"][course][\"schedules\"].append(\n",
+    "            {\n",
+    "                \"date\": row[\"date_str\"],\n",
+    "                \"timeFrame\": row[\"timeframe\"],\n",
+    "            }\n",
+    "        )\n",
+    "\n",
+    "for bldg, bdata in buildings.items():\n",
+    "    for room, rdata in bdata[\"rooms\"].items():\n",
+    "        for course, cdata in rdata[\"classes\"].items():\n",
+    "            cdata[\"schedules\"].sort(key=lambda x: (x[\"date\"], x[\"timeFrame\"]))\n",
+    "\n",
+    "for bldg, bdata in buildings.items():\n",
+    "    out_obj = {\n",
+    "        \"building\": bldg,           \n",
+    "        \"rooms\": bdata[\"rooms\"],    \n",
+    "    }\n",
+    "    def to_plain(obj):\n",
+    "        if isinstance(obj, defaultdict):\n",
+    "            obj = {k: to_plain(v) for k, v in obj.items()}\n",
+    "        elif isinstance(obj, dict):\n",
+    "            obj = {k: to_plain(v) for k, v in obj.items()}\n",
+    "        elif isinstance(obj, list):\n",
+    "            obj = [to_plain(v) for v in obj]\n",
+    "        return obj\n",
+    "\n",
+    "    out_plain = to_plain(out_obj)\n",
+    "    out_path = os.path.join(OUT_DIR, f\"{bldg}.json\")\n",
+    "    with open(out_path, \"w\") as f:\n",
+    "        json.dump(out_plain, f, indent=2)\n",
+    "\n",
+    "print(f\"Done. Wrote {len(buildings)} building files to: {OUT_DIR}/\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
