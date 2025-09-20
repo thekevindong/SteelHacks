@@ -8,16 +8,16 @@ function Header(){
       {/* Logo / Brand */}
       <div className="logo-container">
         <div className="logo-circle">P</div>
-        <span className="logo-text">Pitt Campus Dashboard</span>
-      </div>
+        <span className="logo-text">Open Desk </span>
 
-      {/* Navigation */}
-      <nav className="nav-links">
+        <nav className="nav-links">
         <a href="#dashboard">Dashboard</a>
         <a href="#buildings">Buildings</a>
         <a href="#accessibility">Accessibility</a>
         <a href="#about">About</a>
       </nav>
+      </div>
+
 
       {/* Search on its own line */}
       <div className="search-container">
