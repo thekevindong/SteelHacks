@@ -1,4 +1,4 @@
-**OpenDesk**
+**#OpenDesk**
 
 This project is a web based site that lets users select any academic building around campus and instantly view which rooms are occupied or not, making it much easier to find a spot to study. By utilizing data obtained from 25Live, we provide users relief from long walks around each floor of Hillman and peursing every floor of Cathy in the hopes of finding a good place to get some work done <br>
 
