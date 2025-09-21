@@ -6,10 +6,10 @@ const buildingAddresses = {
   "Alumni Hall": "4227 Fifth Ave, Pittsburgh, PA 15260",  
   "Barco Law Building": "3900 Forbes Ave, Pittsburgh, PA 15260",  
   "Bellefield Hall": "315 S. Bellefield Ave, Pittsburgh, PA 15260",  
-  "Bendm": "UNKNOWN_ADDRESS",  
+  "Bendm": "3700 O'Hara St, Pittsburgh, PA 15213",  
   "Cathedral of Learning": "4200 Fifth Ave, Pittsburgh, PA 15260",  
   "Chevron Hall": "219 Parkman Ave, Pittsburgh, PA 15260",  
-  "Clapp Hall": "UNKNOWN_ADDRESS",  
+  "Clapp Hall": "4249 Fifth Ave, Pittsburgh, PA 15260",  
   "Eberly Hall": "200 University Dr, Pittsburgh, PA 15260",  
   "Frick Fine Arts Building": "650 Schenley Dr, Pittsburgh, PA 15260",  
   "Information Sciences Building": "135 N. Bellefield Ave, Pittsburgh, PA 15260",  
@@ -28,6 +28,35 @@ const buildingAddresses = {
   "Wesley W Posvar Hall": "230 S. Bouquet St, Pittsburgh, PA 15260"
 };
 
+
+const buildingImages = {
+  "Allen Hall": "/assets/AllenHall.avif",
+  "Alumni Hall": "/assets/AlumniHall.jpeg",
+  "Barco Law Building": "/assets/BarcoLaw.jpg",
+  "Bellefield Hall": "/assets/BellefieldHall.jpg",
+  "Bendm": "/assets/BenedumHall.jpeg",
+  "Cathedral of Learning": "/assets/Cathy.jpeg",
+  "Chevron Hall": "/assets/ChevronHall.avif",
+  "Clapp Hall": "/assets/ClappHall.jpeg",
+  "Eberly Hall": "/assets/EberlyHall.jpg",
+  "Frick Fine Arts Building": "/assets/FrickFineArts.avif",
+  "Information Sciences Building": "/assets/InformationScience.avif",
+  "Langley Hall": "/assets/Langley.jpeg",
+  "Lawrence Hall": "/assets/Lawrence.avif",
+  "Mervis Hall": "/assets/MervisHall.jpg",
+  "Music Building": "/assets/MusicBuilding.jpg",
+  "Old Engineering Hall": "/assets/OldEngineeringBuilding.jpg",
+  "Public Health Building": "/assets/PublicHealth.jpg",
+  "Scaif Hall": "/assets/ScaifeHall.jpg",
+  "Sennot Square": "/assets/SennotSquare.avif",
+  "Space Research Coordinator Center": "/assets/srcc.avif",
+  "Thackery Hall": "/assets/ThackeryHall.jpeg",
+  "Thaw Hall": "/assets/ThawHall.jpg",
+  "Victoria Building": "/assets/VictoriaHall.webp",
+  "Wesley W Posvar Hall": "/assets/PosvarHall.avif"
+};
+
+
 function Card({ buildingName }){
   return(
     <div className="cardItem">
@@ -41,8 +70,11 @@ function Card({ buildingName }){
       </div>
       <div className="middlePortion">
         <div className="information">
-          <img className="card-Pic" src="./public/pittLogo.png" alt={buildingName}></img>
-          <h2>Click To View Room Info</h2>
+          <img 
+            className="card-Pic" 
+            src={buildingImages[buildingName]} 
+            alt={buildingName} 
+          />
         </div>
       </div>
     </div> 

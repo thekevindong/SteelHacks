@@ -28,7 +28,6 @@ function Header({ searchTerm, setSearchTerm }) {
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search buildings, rooms, or events..."
         />
-        <button type="submit">Go</button>
       </form>
     </header>
   )
