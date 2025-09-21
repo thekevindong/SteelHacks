@@ -26,18 +26,7 @@
   padding:16px;
   background-color:#f5f7fa;
 }
-
-.information p{
-  font-weight: 800;
-}
-
-.listItems{
-  margin:0;
-  padding-left: 16px;
-  list-style: none;
-}
-
 .card-Pic{
   width:100px;
-  display: flex;
+  text-align: center;
 }
