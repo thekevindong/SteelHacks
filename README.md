@@ -13,6 +13,8 @@ This project is a web based site that lets users select any academic building ar
 ## Technologies Used
 <ul>
   <li>React+vite</li>
+  <li>CSS</li>
+  <li>HTML</li>
   <li>Flask</li>
   <li>Python</li>
   <li>r</li>
