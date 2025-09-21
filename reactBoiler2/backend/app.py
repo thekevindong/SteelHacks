@@ -63,13 +63,39 @@ def get_schedule():
     if not building_name or not room_number or not class_type:
         return jsonify({"error": "Missing query parameters"}), 400
 
-    sessions = [{"date": item["date"], "timeFrame": item["timeFrame"]}
-                for item in all_data
-                if item["building_name"] == building_name
-                and item["room_number"] == room_number
-                and item["class_type"] == class_type]
+    if class_type == "ALL":
+        sessions = [{"date": item["date"], "timeFrame": item["timeFrame"]}
+                    for item in all_data
+                    if item["building_name"] == building_name
+                    and item["room_number"] == room_number]
+    else:
+        sessions = [{"date": item["date"], "timeFrame": item["timeFrame"]}
+                    for item in all_data
+                    if item["building_name"] == building_name
+                    and item["room_number"] == room_number
+                    and item["class_type"] == class_type]
 
     return jsonify(sessions)
+
+@app.route("/api/buildings/<building_name>/sessions", methods=["GET"])
+def get_building_sessions(building_name):
+    """
+    Returns all sessions for all rooms in a building in one request.
+    Each session includes room_number, class_type, date, and timeFrame.
+    """
+    sessions = [
+        {
+            "room_number": item["room_number"],
+            "class_type": item["class_type"],
+            "date": item["date"],
+            "timeFrame": item["timeFrame"]
+        }
+        for item in all_data
+        if item["building_name"] == building_name
+    ]
+    return jsonify(sessions)
+
+
 
 # ------------------ BUILD FRONTEND ------------------
 def build_frontend():
