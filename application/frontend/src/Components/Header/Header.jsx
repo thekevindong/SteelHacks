@@ -26,7 +26,7 @@ function Header({ searchTerm, setSearchTerm }) {
         />
       </form>
       
-    <p><b>Note</b>: All rooms not explicilty mentioned are not schedueled for the foreseeable future at the current time.</p>
+    <p><b>Note</b>: All rooms not explicilty mentioned are not scheduled for the foreseeable future at the current time.</p>
     </header>
   )
 }
