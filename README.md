@@ -22,3 +22,11 @@ This project is a web based site that lets users select any academic building ar
   <li>Jupyter</li>
   <li>ChatGPT</li>
 </ul>
+
+## Creators
+ <ul>
+  <li> <b>Kevin Dong</b> | <i>ked203@pitt.edu</i> </li>
+  <li> <b>Benjamin Henson</b> | <i>bgh29@pitt.edu</i> </li>
+  <li> <b>Aayush Shah</b> | <i>aks290@pitt.edu</i> </li>
+  <li> <b>Max Fang</b> | <i>mmf125@pitt.edu</i> </li>
+</ul>
