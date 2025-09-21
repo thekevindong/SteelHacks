@@ -9,17 +9,13 @@ function Header({ searchTerm, setSearchTerm }) {
     <header className="header">
       {/* Logo / Brand */}
       <div className="logo-container">
-        <div className="logo-circle">P</div>
+        <div className="logo-circle"><img src="OpenDeskLogo.png"></img></div>
         <span className="logo-text">Open Desk </span>
 
         <nav className="nav-links">
-          <a href="#dashboard">Dashboard</a>
-          <a href="#buildings">Buildings</a>
-          <a href="#accessibility">Accessibility</a>
-          <a href="#about">About</a>
+          <a href="#page-footer">About</a>
         </nav>
       </div>
-
       {/* Search */}
       <form className="search-container" onSubmit={handleSubmit}>
         <input
@@ -29,6 +25,8 @@ function Header({ searchTerm, setSearchTerm }) {
           placeholder="Search buildings, rooms, or events..."
         />
       </form>
+      
+    <p><b>Note</b>: All rooms not explicilty mentioned are not schedueled for the foreseeable future at the current time.</p>
     </header>
   )
 }

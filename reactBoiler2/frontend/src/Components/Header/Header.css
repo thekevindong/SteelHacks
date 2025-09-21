@@ -17,6 +17,9 @@
   position: relative;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
+  border-radius:15px;
+  margin-top:25px;
+  margin-bottom:30px;
 }
 
 .logo-container {
@@ -26,16 +29,18 @@
 }
 
 .logo-circle {
-  background-color: var(--pitt-gold);
+  background-color: lightyellow;
   color: var(--pitt-blue);
   font-weight: bold;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
+  width: 60px;
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.25rem;
+}
+.logo-circle img {
+  width: 65px;
 }
 
 .logo-text {
@@ -49,7 +54,7 @@
   font-weight: 500;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding-left: 600px;
+  padding-left: 1000px;
 }
 
 .nav-links a {

@@ -8,6 +8,11 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(to bottom, rgb(57, 57, 235), rgb(120, 98, 243));
+  background: linear-gradient(to right, #56CCF2, #2F80ED);
+}
+
+html{
+  scroll-behavior: smooth;
+  border-radius: 15px;
 }
 

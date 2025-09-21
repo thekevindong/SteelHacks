@@ -1,0 +1,24 @@
+
+
+p,h1{
+    color:white
+}
+
+h1 {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.about-section {
+    background-color: var(--pitt-blue);
+    border-radius: 15px;
+}
+
+#about-text {
+    margin: 0 auto;
+    padding: 0 20px 20px 20px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}

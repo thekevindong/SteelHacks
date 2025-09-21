@@ -52,7 +52,9 @@ function App() {
         />
       )}
 
-      <Footer />
+      <div id="page-footer">
+        <Footer/>
+      </div>
     </div>
   )
 }
